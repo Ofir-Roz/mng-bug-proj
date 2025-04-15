@@ -1,8 +1,21 @@
 import express from 'express'
 import { bugService } from './services/bug.service.js'
 import { loggerService } from './services/logger.service.js'
+import cors from 'cors'
 
 const app = express()
+
+const corsOptions = {
+    origin: [
+        'http://127.0.0.1:5173',
+        'http://localhost:5173',
+        'http://127.0.0.1:5174',
+        'http://localhost:5174'
+    ],
+    credentials: true
+}
+
+app.use(cors(corsOptions))
 
 //* ------------------------------ Bug Crud API ------------------------------ *//
 //* List
