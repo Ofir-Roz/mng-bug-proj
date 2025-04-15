@@ -1,11 +1,8 @@
 import express from 'express'
 import { bugService } from './services/bug.service.js'
+import { loggerService } from './services/logger.service.js'
 
 const app = express()
-
-app.get('/', (req, res) => { res.send('Hello there!') })
-app.listen(3030, () => { console.log('Server ready at port 3030') })
-
 
 //* ------------------------------ Bug Crud API ------------------------------ *//
 //* List
@@ -15,7 +12,7 @@ app.get('/api/bug', async (req, res) => {
         const bugs = await bugService.query()
         res.send(bugs)
     } catch (err) {
-        console.log('err:', err)
+        loggerService.error(`Couldn't get bugs`, err)
         res.status(400).send('Failed to get bugs')
     }
 })
@@ -32,7 +29,7 @@ app.get('/api/bug/save', async (req, res) => {
         const savedBug = await bugService.save(bugToSave)
         res.send(savedBug)
     } catch (err) {
-        console.log('err:', err)
+        loggerService.error(`Failed to save bug ${bugToSave._id}`, err)
         res.status(400).send('Failed to save bug')
     }
 })
@@ -44,7 +41,7 @@ app.get('/api/bug/:bugId', async (req, res) => {
         const bug = await bugService.getById(bugId)
         res.send(bug)
     } catch (err) {
-        console.log('err:', err)
+        loggerService.error(`Couldn't get bug ${bugId}`, err)
         res.status(400).send('Failed to get bug')
     }
 })
@@ -56,7 +53,17 @@ app.get('/api/bug/:bugId/remove', async (req, res) => {
         await bugService.remove(bugId)
         res.send('Bug removed')
     } catch (err) {
-        console.log('err:', err)
+        loggerService.error(`Couldn't remove bug ${bugId}`, err)
         res.status(400).send('Failed to remove bug')
     }
+})
+
+
+const port = 3030
+app.listen(port, () => {
+     loggerService.info(`Server listening on port http://127.0.0.1:${port}`) 
+})
+
+app.get('/', (req, res) => {
+    res.send(`<h1>Hello And Welcome!</h1>`)
 })
