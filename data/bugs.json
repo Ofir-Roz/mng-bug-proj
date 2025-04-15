@@ -1,0 +1,32 @@
+[
+    {
+        "_id": "X70Jjh",
+        "title": "Server crushed",
+        "severity": null,
+        "createdAt": 1744713761048
+    },
+    {
+        "_id": "b101",
+        "title": "Exploded",
+        "severity": null,
+        "createdAt": 1744713926685
+    },
+    {
+        "_id": "b102",
+        "title": "Cannot save a Truck",
+        "severity": 2,
+        "createdAt": 1542107359454
+    },
+    {
+        "_id": "b103",
+        "title": "Cannot save a Bus",
+        "severity": 1,
+        "createdAt": 1542107359454
+    },
+    {
+        "_id": "b104",
+        "title": "Cannot save a Motorcycle",
+        "severity": 4,
+        "createdAt": 1542107359454
+    }
+]
