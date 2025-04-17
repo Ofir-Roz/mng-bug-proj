@@ -1,14 +1,8 @@
 [
     {
-        "_id": "X70Jjh",
-        "title": "Server crushed",
-        "severity": null,
-        "createdAt": 1744713761048
-    },
-    {
         "_id": "b101",
-        "title": "Exploded",
-        "severity": null,
+        "title": "Server crushed",
+        "severity": 8,
         "createdAt": 1744713926685
     },
     {

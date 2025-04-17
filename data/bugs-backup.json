@@ -1,9 +1,9 @@
 [
     {
         "_id": "b101",
-        "title": "Cannot save a Car",
-        "severity": 3,
-        "createdAt": 1542107359454
+        "title": "Server crushed",
+        "severity": 8,
+        "createdAt": 1744713926685
     },
     {
         "_id": "b102",

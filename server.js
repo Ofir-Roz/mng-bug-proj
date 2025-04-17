@@ -15,6 +15,7 @@ const corsOptions = {
     credentials: true
 }
 
+app.use(express.static('public'))
 app.use(cors(corsOptions))
 
 //* ------------------------------ Bug Crud API ------------------------------ *//
@@ -38,11 +39,12 @@ app.get('/api/bug/save', async (req, res) => {
         severity: +req.query.severity,
         createdAt: +Date.now()
     }
+    
     try {
         const savedBug = await bugService.save(bugToSave)
         res.send(savedBug)
     } catch (err) {
-        loggerService.error(`Failed to save bug ${bugToSave._id}`, err)
+        loggerService.error(`Failed to save bug`, err)
         res.status(400).send('Failed to save bug')
     }
 })
