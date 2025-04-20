@@ -1,3 +1,4 @@
+import PDFDocument from 'pdfkit'
 import { makeId, readJsonFile, writeJsonFile } from "./utils.js"
 
 export const bugService = {
@@ -5,6 +6,7 @@ export const bugService = {
     getById,
     save,
     remove,
+    generateBugsPdf
 }
 
 const bugs = readJsonFile('./data/bugs.json')
@@ -52,6 +54,39 @@ async function save(bugToSave) {
         }
         await _saveBugsToFile()
         return bugToSave
+    } catch (err) {
+        throw err
+    }
+}
+
+async function generateBugsPdf(res) {
+    try {
+        const doc = new PDFDocument()
+        const bugs = await query()
+
+        // Set response headers for PDF download
+        res.setHeader('Content-Type', 'application/pdf')
+        res.setHeader('Content-Disposition', 'attachment; filename="bugs.pdf"')
+
+        // Pipe the PDF document to the response
+        doc.pipe(res);
+
+        // Add content to the PDF
+        doc.fontSize(20).text('Bugs Report', { align: 'center' })
+        doc.moveDown()
+
+        bugs.forEach((bug, idx) => {
+            doc.fontSize(14).text(`Bug #${idx + 1}`)
+            doc.text(`ID: ${bug._id}`)
+            doc.text(`Title: ${bug.title}`)
+            doc.text(`Severity: ${bug.severity}`)
+            doc.text(`Description: ${bug.description}`)
+            doc.text(`Created At: ${new Date(bug.createdAt).toLocaleString()}`)
+            doc.moveDown()
+        });
+
+        // Finalize the PDF and end the stream
+        doc.end()
     } catch (err) {
         throw err
     }

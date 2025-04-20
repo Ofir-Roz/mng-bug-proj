@@ -3,6 +3,7 @@ import { bugService } from './services/bug.service.js'
 import { loggerService } from './services/logger.service.js'
 import cors from 'cors'
 
+
 const app = express()
 
 const corsOptions = {
@@ -20,7 +21,6 @@ app.use(cors(corsOptions))
 
 //* ------------------------------ Bug Crud API ------------------------------ *//
 //* List
-
 app.get('/api/bug', async (req, res) => {
     try {
         const bugs = await bugService.query()
@@ -47,6 +47,16 @@ app.get('/api/bug/save', async (req, res) => {
     } catch (err) {
         loggerService.error(`Failed to save bug`, err)
         res.status(400).send('Failed to save bug')
+    }
+})
+
+//* Download
+app.get(`/api/bug/downloadBugs`, async (req, res) =>{
+    try {
+        await bugService.generateBugsPdf(res)
+    } catch (err) {
+        loggerService.error(`Failed to generate PDF`, err)
+        res.status(500).send(`Failed to generate PDF`)
     }
 })
 

@@ -2,9 +2,9 @@
     {
         "_id": "b101",
         "title": "Server crushed",
-        "severity": 12,
+        "severity": 8,
         "description": "The server crashed due to an unhandled exception in the code.",
-        "createdAt": 1744908967257
+        "createdAt": 1744713926685
     },
     {
         "_id": "b102",
