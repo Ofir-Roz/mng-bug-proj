@@ -11,9 +11,18 @@ export const bugService = {
 
 const bugs = readJsonFile('./data/bugs.json')
 
-async function query() {
+async function query(filterBy) {
+    let bugsToDisplay = bugs
     try {
-        return bugs
+        if (filterBy.title) {
+            const regExp = new RegExp(filterBy.title, 'i')
+            bugsToDisplay = bugsToDisplay.filter(bug => regExp.test(bug.title))
+        }
+
+        if (filterBy.minSeverity) {
+            bugsToDisplay = bugsToDisplay.filter(bug => bug.severity >= filterBy.minSeverity)
+        }
+        return bugsToDisplay
     } catch (err) {
         throw err
     }
@@ -38,7 +47,7 @@ async function remove(bugId) {
     } catch (err) {
         throw err
     }
-    
+
 }
 
 async function save(bugToSave) {
@@ -64,6 +73,7 @@ async function generateBugsPdf(res) {
         const doc = new PDFDocument()
         const bugs = await query()
 
+        console.log('bugs', bugs)
         // Set response headers for PDF download
         res.setHeader('Content-Type', 'application/pdf')
         res.setHeader('Content-Disposition', 'attachment; filename="bugs.pdf"')
@@ -88,8 +98,7 @@ async function generateBugsPdf(res) {
         // Finalize the PDF and end the stream
         doc.end()
     } catch (err) {
-        console.error('Error generating PDF:', err);
-        res.status(500).send('Failed to generate PDF');
+        throw err
     }
 }
 

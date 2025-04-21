@@ -18,12 +18,17 @@ const corsOptions = {
 
 app.use(express.static('public'))
 app.use(cors(corsOptions))
+app.use(express.json())
 
 //* ------------------------------ Bug Crud API ------------------------------ *//
 //* List
 app.get('/api/bug', async (req, res) => {
+    const filterBy = {
+        title: req.query.title,
+        minSeverity: +req.query.minSeverity 
+    }
     try {
-        const bugs = await bugService.query()
+        const bugs = await bugService.query(filterBy)
         res.send(bugs)
     } catch (err) {
         loggerService.error(`Couldn't get bugs`, err)
@@ -31,13 +36,33 @@ app.get('/api/bug', async (req, res) => {
     }
 })
 
-//* Create/Update
-app.get('/api/bug/save', async (req, res) => {
+//* Create
+app.post('/api/bug', async (req, res) => {
+
     const bugToSave = {
-        _id: req.query._id ,
-        title: req.query.title,
-        severity: +req.query.severity,
-        description: req.query.description,
+        title: req.body.title,
+        severity: +req.body.severity,
+        description: req.body.description,
+        createdAt: +Date.now()
+    }
+    
+    try {
+        const savedBug = await bugService.save(bugToSave)
+        res.send(savedBug)
+    } catch (err) {
+        loggerService.error(`Failed to save bug`, err)
+        res.status(400).send('Failed to save bug')
+    }
+})
+
+//* Update
+app.put('/api/bug/:bugId', async (req, res) => {
+
+    const bugToSave = {
+        _id: req.body._id ,
+        title: req.body.title,
+        severity: +req.body.severity,
+        description: req.body.description,
         createdAt: +Date.now()
     }
     
@@ -73,7 +98,7 @@ app.get('/api/bug/:bugId', async (req, res) => {
 })
 
  //* Delete
-app.get('/api/bug/:bugId/remove', async (req, res) => { 
+app.delete('/api/bug/:bugId', async (req, res) => { 
     const { bugId } = req.params
     try {
         await bugService.remove(bugId)
