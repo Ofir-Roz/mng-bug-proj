@@ -11,7 +11,7 @@ export const bugService = {
 
 const bugs = readJsonFile('./data/bugs.json')
 
-async function query(filterBy) {
+async function query(filterBy = {}) {
     let bugsToDisplay = bugs
     try {
         if (filterBy.title) {
@@ -68,12 +68,11 @@ async function save(bugToSave) {
     }
 }
 
-async function generateBugsPdf(res) {
+async function generateBugsPdf(req, res) {
     try {
         const doc = new PDFDocument()
         const bugs = await query()
 
-        console.log('bugs', bugs)
         // Set response headers for PDF download
         res.setHeader('Content-Type', 'application/pdf')
         res.setHeader('Content-Disposition', 'attachment; filename="bugs.pdf"')
@@ -91,6 +90,8 @@ async function generateBugsPdf(res) {
             doc.text(`Title: ${bug.title}`)
             doc.text(`Severity: ${bug.severity}`)
             doc.text(`Description: ${bug.description}`)
+            if (bug.labels)
+                doc.text(`Labels: ${bug.labels.join(', ')}`)
             doc.text(`Created At: ${new Date(bug.createdAt).toLocaleString()}`)
             doc.moveDown()
         })

@@ -36,22 +36,25 @@ app.get('/api/bug', async (req, res) => {
     }
 })
 
-//* Create
-app.post('/api/bug', async (req, res) => {
-
-    const bugToSave = {
-        title: req.body.title,
-        severity: +req.body.severity,
-        description: req.body.description,
-        createdAt: +Date.now()
-    }
-    
+//* Download
+app.get(`/api/bug/downloadBugs`, async (req, res) =>{
     try {
-        const savedBug = await bugService.save(bugToSave)
-        res.send(savedBug)
+        await bugService.generateBugsPdf(req, res)
     } catch (err) {
-        loggerService.error(`Failed to save bug`, err)
-        res.status(400).send('Failed to save bug')
+        loggerService.error(`Failed to generate PDF`, err)
+        res.status(500).send(`Failed to generate PDF`)
+    }
+})
+
+//* Read
+app.get('/api/bug/:bugId', async (req, res) => { 
+    const { bugId } = req.params
+    try {
+        const bug = await bugService.getById(bugId)
+        res.send(bug)
+    } catch (err) {
+        loggerService.error(`Couldn't get bug ${bugId}`, err)
+        res.status(400).send('Failed to get bug')
     }
 })
 
@@ -75,25 +78,22 @@ app.put('/api/bug/:bugId', async (req, res) => {
     }
 })
 
-//* Download
-app.get(`/api/bug/downloadBugs`, async (req, res) =>{
-    try {
-        await bugService.generateBugsPdf(res)
-    } catch (err) {
-        loggerService.error(`Failed to generate PDF`, err)
-        res.status(500).send(`Failed to generate PDF`)
-    }
-})
+//* Create
+app.post('/api/bug', async (req, res) => {
 
-//* Read
-app.get('/api/bug/:bugId', async (req, res) => { 
-    const { bugId } = req.params
+    const bugToSave = {
+        title: req.body.title,
+        severity: +req.body.severity,
+        description: req.body.description,
+        createdAt: +Date.now()
+    }
+    
     try {
-        const bug = await bugService.getById(bugId)
-        res.send(bug)
+        const savedBug = await bugService.save(bugToSave)
+        res.send(savedBug)
     } catch (err) {
-        loggerService.error(`Couldn't get bug ${bugId}`, err)
-        res.status(400).send('Failed to get bug')
+        loggerService.error(`Failed to save bug`, err)
+        res.status(400).send('Failed to save bug')
     }
 })
 

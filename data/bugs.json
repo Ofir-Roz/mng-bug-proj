@@ -1,11 +1,29 @@
 [
     {
+        "_id": "11TfFN",
+        "title": "hahah",
+        "severity": 80,
+        "description": "jajaja",
+        "createdAt": 1745255959758
+    },
+    {
+        "_id": "tIwq7l",
+        "title": "blala",
+        "severity": 70,
+        "description": "kakdkk",
+        "createdAt": 1745255663639
+    },
+    {
         "_id": "b101",
         "title": "Server crushed",
         "severity": 8,
         "description": "The server crashed due to an unhandled exception in the code.",
         "createdAt": 1744713926685,
-        "labels" : ["critical", "need-CR", "dev-branch"]
+        "labels": [
+            "critical",
+            "need-CR",
+            "dev-branch"
+        ]
     },
     {
         "_id": "b102",
@@ -13,15 +31,10 @@
         "severity": 2,
         "description": "Saving a truck entity fails due to a validation error.",
         "createdAt": 1542107359454,
-        "labels": ["low-priority", "backend"]
-    },
-    {
-        "_id": "b103",
-        "title": "Cannot save a Bus",
-        "severity": 1,
-        "description": "Saving a bus entity fails due to a missing field.",
-        "createdAt": 1542107359454,
-        "labels": ["frontend", "validation"]
+        "labels": [
+            "low-priority",
+            "backend"
+        ]
     },
     {
         "_id": "b104",
@@ -29,6 +42,9 @@
         "severity": 4,
         "description": "Saving a motorcycle entity fails due to a database constraint.",
         "createdAt": 1542107359454,
-        "labels": ["database", "constraint"]
+        "labels": [
+            "database",
+            "constraint"
+        ]
     }
 ]
