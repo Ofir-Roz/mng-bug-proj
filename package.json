@@ -1,5 +1,5 @@
 {
-  "name": "mng-bug-proj",
+  "name": "mng-bug-backend",
   "version": "1.0.0",
   "description": "A bug management system. It allows users to add/remove and update bugs.",
   "main": "index.js",

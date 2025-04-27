@@ -1,10 +1,9 @@
-import express from 'express'
+import express, { json } from 'express'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
+
 import { bugService } from './services/bug.service.js'
 import { loggerService } from './services/logger.service.js'
-import cors from 'cors'
-
-
-const app = express()
 
 const corsOptions = {
     origin: [
@@ -16,12 +15,28 @@ const corsOptions = {
     credentials: true
 }
 
+const app = express()
+
+//* Express Config:
 app.use(express.static('public'))
 app.use(cors(corsOptions))
 app.use(express.json())
+app.use(cookieParser())
+
 
 //* ------------------------------ Bug Crud API ------------------------------ *//
-//* List
+
+// Download
+app.get(`/api/bug/downloadBugs`, async (req, res) =>{
+    try {
+        await bugService.generateBugsPdf(req, res)
+    } catch (err) {
+        loggerService.error(`Failed to generate PDF`, err)
+        res.status(500).send(`Failed to generate PDF`)
+    }
+})
+
+// List
 app.get('/api/bug', async (req, res) => {
     const filterBy = {
         title: req.query.title,
@@ -36,21 +51,19 @@ app.get('/api/bug', async (req, res) => {
     }
 })
 
-//* Download
-app.get(`/api/bug/downloadBugs`, async (req, res) =>{
-    try {
-        await bugService.generateBugsPdf(req, res)
-    } catch (err) {
-        loggerService.error(`Failed to generate PDF`, err)
-        res.status(500).send(`Failed to generate PDF`)
-    }
-})
 
-//* Read
+// Read
 app.get('/api/bug/:bugId', async (req, res) => { 
     const { bugId } = req.params
+
+    const visitedBugs =  req.cookies.visitedBugs? JSON.parse(req.cookies.visitedBugs) : []
+    console.log('visitedBugs', visitedBugs)
+
+    visitedBugs.push(bugId)
+    
     try {
         const bug = await bugService.getById(bugId)
+        res.cookie(`visitedBugs`, JSON.stringify(visitedBugs), { maxAge: 1000 * 7})
         res.send(bug)
     } catch (err) {
         loggerService.error(`Couldn't get bug ${bugId}`, err)
@@ -58,7 +71,7 @@ app.get('/api/bug/:bugId', async (req, res) => {
     }
 })
 
-//* Update
+// Update
 app.put('/api/bug/:bugId', async (req, res) => {
 
     const bugToSave = {
@@ -78,7 +91,7 @@ app.put('/api/bug/:bugId', async (req, res) => {
     }
 })
 
-//* Create
+// Create
 app.post('/api/bug', async (req, res) => {
 
     const bugToSave = {
@@ -97,7 +110,7 @@ app.post('/api/bug', async (req, res) => {
     }
 })
 
- //* Delete
+ // Delete
 app.delete('/api/bug/:bugId', async (req, res) => { 
     const { bugId } = req.params
     try {
@@ -110,11 +123,11 @@ app.delete('/api/bug/:bugId', async (req, res) => {
 })
 
 
+// Start the server and define a default route
 const port = 3030
 app.listen(port, () => {
      loggerService.info(`Server listening on port http://127.0.0.1:${port}`) 
 })
-
 app.get('/', (req, res) => {
     res.send(`<h1>Hello And Welcome!</h1>`)
 })
