@@ -52,19 +52,33 @@ app.get('/api/bug', async (req, res) => {
 })
 
 
-// Read
+/* Read
+ - Limits the user to viewing a maximum of 3 bugs within a 10-second time window
+ - Tracks visited bugs using cookies */
 app.get('/api/bug/:bugId', async (req, res) => { 
+
     const { bugId } = req.params
+    const visitedBugs = req.cookies.visitedBugs ? JSON.parse(req.cookies.visitedBugs) : []
 
-    const visitedBugs =  req.cookies.visitedBugs? JSON.parse(req.cookies.visitedBugs) : []
-    console.log('visitedBugs', visitedBugs)
-
-    visitedBugs.push(bugId)
+    if (!visitedBugs.includes(bugId))
+        visitedBugs.push(bugId)
     
     try {
         const bug = await bugService.getById(bugId)
-        res.cookie(`visitedBugs`, JSON.stringify(visitedBugs), { maxAge: 1000 * 7})
-        res.send(bug)
+        
+        if (visitedBugs.length <= 3) {
+            console.log('User visited the following bugs:', visitedBugs)
+
+            res.cookie(`visitedBugs`, JSON.stringify(visitedBugs), { maxAge: 1000 * 10 })
+            res.send(bug)
+        } else {
+            loggerService.info(`Limits the user from seeing more than 3 different bugs`, visitedBugs)
+            res.status(401).send({
+                error: 'Too many requests',
+                message: 'You have viewed the maximum of 3 bugs. Please wait 10 seconds before trying again.',
+                visitedBugs
+            })
+        }
     } catch (err) {
         loggerService.error(`Couldn't get bug ${bugId}`, err)
         res.status(400).send('Failed to get bug')
