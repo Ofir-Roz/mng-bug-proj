@@ -40,10 +40,18 @@ app.get(`/api/bug/downloadBugs`, async (req, res) =>{
 app.get('/api/bug', async (req, res) => {
     const filterBy = {
         title: req.query.title,
-        minSeverity: +req.query.minSeverity 
+        minSeverity: +req.query.minSeverity,
+        labels: req.query.labels
     }
+
+    const sortBy = {
+        title: +req.query.sortByTitle,      
+        severity: +req.query.sortBySeverity, 
+        createdAt: +req.query.sortByDate    
+    }
+
     try {
-        const bugs = await bugService.query(filterBy)
+        const bugs = await bugService.query(filterBy, sortBy)
         res.send(bugs)
     } catch (err) {
         loggerService.error(`Couldn't get bugs`, err)

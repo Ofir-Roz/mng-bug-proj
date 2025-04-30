@@ -11,9 +11,10 @@ export const bugService = {
 
 const bugs = readJsonFile('./data/bugs.json')
 
-async function query(filterBy = {}) {
+async function query(filterBy = {}, sortBy = {}) {
     let bugsToDisplay = bugs
     try {
+        // Filtering
         if (filterBy.title) {
             const regExp = new RegExp(filterBy.title, 'i')
             bugsToDisplay = bugsToDisplay.filter(bug => regExp.test(bug.title))
@@ -22,6 +23,23 @@ async function query(filterBy = {}) {
         if (filterBy.minSeverity) {
             bugsToDisplay = bugsToDisplay.filter(bug => bug.severity >= filterBy.minSeverity)
         }
+
+        if (filterBy.labels && filterBy.labels.length) {
+            bugsToDisplay = bugsToDisplay.filter(bug =>
+                bug.labels && bug.labels.some(label => filterBy.labels.includes(label))
+            )
+        }
+
+        // Sorting
+        if (sortBy.title)
+            bugsToDisplay.sort((a, b) => (a.title.localeCompare(b.title) * sortBy.title))
+
+        if (sortBy.severity)
+            bugsToDisplay.sort((a, b) => (a.severity - b.severity) * sortBy.severity)
+
+        if (sortBy.createdAt)
+            bugsToDisplay.sort((a, b) => (a.createdAt - b.createdAt) * sortBy.createdAt)
+
         return bugsToDisplay
     } catch (err) {
         throw err
@@ -107,3 +125,7 @@ async function generateBugsPdf(req, res) {
 function _saveBugsToFile() {
     return writeJsonFile('./data/bugs.json', bugs)
 }
+
+
+// const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+// console.log(emailRegex.test("test@example.com")); // true
