@@ -1,0 +1,10 @@
+@baseUrl = http://127.0.0.1:3030/api/bug 
+
+###
+get {{baseUrl}}
+
+###
+get {{baseUrl}}/b105
+
+###
+get {{baseUrl}}?pageIdx=1

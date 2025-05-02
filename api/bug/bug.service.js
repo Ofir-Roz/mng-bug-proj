@@ -1,5 +1,5 @@
 import PDFDocument from 'pdfkit'
-import { makeId, readJsonFile, writeJsonFile } from "./utils.js"
+import { makeId, readJsonFile, writeJsonFile } from '../../services/utils.js'
 
 export const bugService = {
     query,
@@ -8,6 +8,8 @@ export const bugService = {
     remove,
     generateBugsPdf
 }
+
+const PAGE_SIZE = 4
 
 const bugs = readJsonFile('./data/bugs.json')
 
@@ -28,6 +30,12 @@ async function query(filterBy = {}, sortBy = {}) {
             bugsToDisplay = bugsToDisplay.filter(bug =>
                 bug.labels && bug.labels.some(label => filterBy.labels.includes(label))
             )
+        }
+
+        //Pagination
+        if (filterBy.pageIdx !== undefined && !isNaN(filterBy.pageIdx)) {
+            const startIdx = filterBy.pageIdx * PAGE_SIZE
+            bugsToDisplay = bugsToDisplay.slice( startIdx, startIdx + PAGE_SIZE )
         }
 
         // Sorting

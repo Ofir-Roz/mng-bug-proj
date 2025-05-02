@@ -1,17 +1,5 @@
 [
     {
-        "_id": "b101",
-        "title": "Server crushed",
-        "severity": 8,
-        "description": "The server crashed due to an unhandled exception in the code.",
-        "createdAt": 1744713926685,
-        "labels": [
-            "critical",
-            "need-CR",
-            "dev-branch"
-        ]
-    },
-    {
         "_id": "b102",
         "title": "Cannot save a Truck",
         "severity": 2,
