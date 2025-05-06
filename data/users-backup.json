@@ -1,0 +1,72 @@
+[
+    {
+        "_id": "u101",
+        "fullname": "Muki Ja",
+        "username": "muki",
+        "password": "muki1234",
+        "score": 100
+    },
+    {
+        "_id": "u102",
+        "fullname": "Dana Levi",
+        "username": "danal",
+        "password": "dana5678",
+        "score": 120
+    },
+    {
+        "_id": "u103",
+        "fullname": "Roni Cohen",
+        "username": "ronic",
+        "password": "roni4321",
+        "score": 95
+    },
+    {
+        "_id": "u104",
+        "fullname": "Avi Bar",
+        "username": "avib",
+        "password": "avi8765",
+        "score": 110
+    },
+    {
+        "_id": "u105",
+        "fullname": "Noa Shalev",
+        "username": "noas",
+        "password": "noa2468",
+        "score": 130
+    },
+    {
+        "_id": "u106",
+        "fullname": "Lior Azulay",
+        "username": "liora",
+        "password": "lior1357",
+        "score": 90
+    },
+    {
+        "_id": "u107",
+        "fullname": "Tamar Gil",
+        "username": "tamarg",
+        "password": "tamar9753",
+        "score": 105
+    },
+    {
+        "_id": "u108",
+        "fullname": "Yossi Peretz",
+        "username": "yossip",
+        "password": "yossi8642",
+        "score": 115
+    },
+    {
+        "_id": "u109",
+        "fullname": "Galit Ben",
+        "username": "galitb",
+        "password": "galit7531",
+        "score": 125
+    },
+    {
+        "_id": "u110",
+        "fullname": "Erez Shani",
+        "username": "erezs",
+        "password": "erez1597",
+        "score": 85
+    }
+]

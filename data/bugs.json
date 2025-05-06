@@ -1,21 +1,27 @@
 [
     {
+        "_id": "b101",
+        "title": "Server crushed",
+        "severity": 8,
+        "description": "The server crashed due to an unhandled exception in the code.",
+        "createdAt": 1744713926685,
+        "labels" : ["critical", "need-CR", "dev-branch"]
+    },
+    {
         "_id": "b102",
         "title": "Cannot save a Truck",
         "severity": 2,
         "description": "Saving a truck entity fails due to a validation error.",
         "createdAt": 1542107359454,
-        "labels": [
-            "low-priority",
-            "backend"
-        ]
+        "labels": ["low-priority", "backend"]
     },
     {
         "_id": "b103",
         "title": "Cannot save a Bus",
-        "severity": 0,
+        "severity": 1,
         "description": "Saving a bus entity fails due to a missing field.",
-        "createdAt": 1746026931072
+        "createdAt": 1542107359454,
+        "labels": ["frontend", "validation"]
     },
     {
         "_id": "b104",
@@ -23,10 +29,7 @@
         "severity": 4,
         "description": "Saving a motorcycle entity fails due to a database constraint.",
         "createdAt": 1542107359454,
-        "labels": [
-            "database",
-            "constraint"
-        ]
+        "labels": ["database", "constraint"]
     },
     {
         "_id": "b105",
@@ -34,11 +37,7 @@
         "severity": 6,
         "description": "The login page layout breaks on mobile devices",
         "createdAt": 1642107359454,
-        "labels": [
-            "frontend",
-            "UI",
-            "mobile"
-        ]
+        "labels": ["frontend", "UI", "mobile"]
     },
     {
         "_id": "b106",
@@ -46,11 +45,7 @@
         "severity": 9,
         "description": "Application memory usage grows continuously during operation",
         "createdAt": 1742107359454,
-        "labels": [
-            "critical",
-            "performance",
-            "backend"
-        ]
+        "labels": ["critical", "performance", "backend"]
     },
     {
         "_id": "b107",
@@ -58,11 +53,7 @@
         "severity": 3,
         "description": "Date picker returns incorrect format for API calls",
         "createdAt": 1642107359454,
-        "labels": [
-            "frontend",
-            "API",
-            "validation"
-        ]
+        "labels": ["frontend", "API", "validation"]
     },
     {
         "_id": "b108",
@@ -70,11 +61,7 @@
         "severity": 10,
         "description": "SQL injection vulnerability found in search function",
         "createdAt": 1842107359454,
-        "labels": [
-            "critical",
-            "security",
-            "backend"
-        ]
+        "labels": ["critical", "security", "backend"]
     },
     {
         "_id": "b109",
@@ -82,11 +69,7 @@
         "severity": 5,
         "description": "Image upload feature fails with files larger than 1MB",
         "createdAt": 1642107359454,
-        "labels": [
-            "frontend",
-            "upload",
-            "UX"
-        ]
+        "labels": ["frontend", "upload", "UX"]
     },
     {
         "_id": "b110",
@@ -94,10 +77,6 @@
         "severity": 7,
         "description": "Transaction fails silently when processing large amounts",
         "createdAt": 1742107359454,
-        "labels": [
-            "critical",
-            "payment",
-            "backend"
-        ]
+        "labels": ["critical", "payment", "backend"]
     }
 ]

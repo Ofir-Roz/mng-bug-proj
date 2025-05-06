@@ -25,16 +25,18 @@ app.use(cookieParser())
 import { bugRoutes } from './api/bug/bug.routes.js'
 app.use('/api/bug', bugRoutes)
 
-
-app.get('/**', (req, res) => {
-    res.sendFile(path.resolve('public/index.html'))
-})
+import { userRoutes } from './api/user/user.routes.js'
+app.use('/api/user', userRoutes)
 
 // Start the server and define a default route
 const port = 3030
 app.listen(port, () => {
-     loggerService.info(`Server listening on port http://127.0.0.1:${port}`) 
+    loggerService.info(`Server listening on port http://127.0.0.1:${port}`) 
 })
 app.get('/', (req, res) => {
     res.send(`<h1>Hello And Welcome!</h1>`)
+})
+
+app.get('/**', (req, res) => {
+    res.sendFile(path.resolve('public/index.html'))
 })
