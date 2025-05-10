@@ -32,12 +32,6 @@ async function query(filterBy = {}, sortBy = {}) {
             )
         }
 
-        //Pagination
-        if (filterBy.pageIdx !== undefined && !isNaN(filterBy.pageIdx)) {
-            const startIdx = filterBy.pageIdx * PAGE_SIZE
-            bugsToDisplay = bugsToDisplay.slice( startIdx, startIdx + PAGE_SIZE )
-        }
-
         // Sorting
         if (sortBy.title)
             bugsToDisplay.sort((a, b) => (a.title.localeCompare(b.title) * sortBy.title))
@@ -48,7 +42,28 @@ async function query(filterBy = {}, sortBy = {}) {
         if (sortBy.createdAt)
             bugsToDisplay.sort((a, b) => (a.createdAt - b.createdAt) * sortBy.createdAt)
 
-        return bugsToDisplay
+        // Prepare pagination data
+        const totalBugs = bugsToDisplay.length
+        const totalPages = Math.ceil(totalBugs / PAGE_SIZE)
+        const pageIdx = filterBy.pageIdx !== undefined ? Math.min(filterBy.pageIdx, Math.max(0, totalPages - 1)) : 0
+
+        // Get bugs for current page
+        if (filterBy.pageIdx !== undefined && !isNaN(filterBy.pageIdx)) {
+            const startIdx = pageIdx * PAGE_SIZE
+            bugsToDisplay = bugsToDisplay.slice(startIdx, startIdx + PAGE_SIZE)
+        }
+
+        return {
+            bugs: bugsToDisplay,
+            pagination: {
+                totalBugs,
+                totalPages,
+                currentPage: pageIdx,
+                pageSize: PAGE_SIZE,
+                hasNext: (pageIdx + 1) < totalPages,
+                hasPrev: pageIdx > 0
+            }
+        }
     } catch (err) {
         throw err
     }
@@ -85,10 +100,14 @@ async function save(bugToSave) {
         }
         else {
             bugToSave._id = makeId()
+            bugToSave.createdAt = Date.now()
             bugs.unshift(bugToSave)
         }
         await _saveBugsToFile()
-        return bugToSave
+        
+        // After saving, query the first page to ensure proper pagination
+        const response = await query({ pageIdx: 0 })
+        return bugToSave._id ? bugToSave : response.bugs[0]
     } catch (err) {
         throw err
     }
